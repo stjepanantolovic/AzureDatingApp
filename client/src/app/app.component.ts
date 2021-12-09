@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
   }
 
   getusers() {
-    this.http.get(this.settings.defaultUrl + '/api/users/').subscribe(
+    this.http.get(this.settings.defaultUrl + 'users/').subscribe(
       (response) => {
         this.users = response;
       },
