@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { User } from './models/user';
 import { AppSettings } from './shared/app-settings';
 import { AppSettingsService } from './shared/appsettings.service';
+import { AccountService } from './_services/account.service';
 
 @Component({
   selector: 'app-root',
@@ -14,24 +16,25 @@ export class AppComponent implements OnInit {
   settings!: AppSettings;
   constructor(
     private http: HttpClient,
-    private appSettingService: AppSettingsService
+    private appSettingsService: AppSettingsService,
+    private accountService: AccountService
   ) {}
 
   ngOnInit(): void {
-    this.appSettingService
-      .getSettings()
-      .subscribe((settings) => (this.settings = settings));
-    this.getusers();
+    this.setBaseUrl();
+    this.setCurrentUser();
+  }
+  
+  setCurrentUser() {
+    const userAsJson = localStorage.getItem('user');
+    if (userAsJson) {
+      const user: User = JSON.parse(userAsJson);
+      this.accountService.setCurrentUser(user);
+    }
   }
 
-  getusers() {
-    this.http.get(this.settings.defaultUrl + 'users/').subscribe(
-      (response) => {
-        this.users = response;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+  setBaseUrl() {
+    this.settings = this.appSettingsService
+    .getSettings();
   }
 }
