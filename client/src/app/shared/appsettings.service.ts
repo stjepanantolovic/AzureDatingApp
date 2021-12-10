@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 // import { Http } from '@angular/http';
-import { Observable, of } from 'rxjs';
+// import { Observable, of } from 'rxjs';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -14,11 +14,11 @@ const SETTINGS_KEY = 'configuration';
 export class AppSettingsService {
   // constructor(private http: Http) {
   // }
-  getSettings(): Observable<AppSettings> {
+  getSettings(): AppSettings {
     const settings = localStorage.getItem(SETTINGS_KEY);
 
     if (settings) {
-      return of(JSON.parse(settings));
+      return JSON.parse(settings);
     } else {
       const xmlHttp = new XMLHttpRequest();
       xmlHttp.open('GET', SETTINGS_LOCATION, false); //
@@ -27,7 +27,7 @@ export class AppSettingsService {
       if (settings) {
         this.saveSettings(appSettings);
       }
-      return of(appSettings);
+      return appSettings;
     }
   }
 
